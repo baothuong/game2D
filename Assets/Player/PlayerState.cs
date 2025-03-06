@@ -10,7 +10,10 @@ public class PlayerState
 
     private string animBoolName;
     protected float xInput;
-    public PlayerState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName)
+    protected float yInput;
+    protected float stateTimer;
+    protected bool triggerCalled;
+    public PlayerState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName)  //su dung dau gach ngang cho cac bien ma chung ta truyen vao qua ham     
     {
         this.player = _player;
         this.stateMachine = _stateMachine;
@@ -22,12 +25,15 @@ public class PlayerState
         //Debug.Log("I enter " + animBoolName);
         player.anim.SetBool(animBoolName,true);
         rb = player.rb;
+        triggerCalled = false;
 
     }
     public virtual void Update()
     {
+        stateTimer -= Time.deltaTime;
         //Debug.Log("I'm in " + animBoolName);
         xInput = Input.GetAxisRaw("Horizontal");
+        yInput = Input.GetAxisRaw("Vertical");
         player.anim.SetFloat("yVelocity", rb.velocity.y);
     }
 
@@ -35,5 +41,10 @@ public class PlayerState
     {
         //Debug.Log("I exit " + animBoolName);
         player.anim.SetBool(animBoolName, false);
+    }
+
+    public virtual void AnimationFinishTrigger()
+    {
+        triggerCalled = true;
     }
 }
